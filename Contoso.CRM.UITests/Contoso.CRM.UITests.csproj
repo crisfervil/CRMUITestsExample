@@ -73,7 +73,7 @@
     <Compile Include="Accounts\AccountsTests.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Forms\CrmFormNameAttribute.cs" />
-    <Compile Include="Forms\DefaultAccountForm.cs" />
+    <Compile Include="Forms\Account\DefaultAccountForm.cs" />
     <Compile Include="Forms\FormTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestBase.cs" />
@@ -85,9 +85,7 @@
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Forms\Account\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
