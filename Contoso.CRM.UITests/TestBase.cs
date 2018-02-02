@@ -14,7 +14,7 @@ namespace Contoso.CRM.UITests
 
         internal IWebDriver GetDriver()
         {
-            IWebDriver driver =  new InternetExplorerDriver();
+            IWebDriver driver =  GetBrowserDriver();
             return driver;
         }
 
@@ -29,11 +29,10 @@ namespace Contoso.CRM.UITests
             IWebDriver driver = null;
 
             // Try to get the base url from the environment variable, otherwise from the configuration file
-            var broserType = Environment.GetEnvironmentVariable(BASE_URL_ENVIRONMENT_VARIABLE);
+            var broserType = Environment.GetEnvironmentVariable(BROWSER_TYPE_ENVIRONMENT_VARIABLE);
 
             // capitalize
             broserType = string.IsNullOrEmpty(broserType) ? "" : broserType.ToLower();
-
 
             var broserMapping = new Dictionary<BrowserTypes, Type>() { { BrowserTypes.Explorer , typeof(InternetExplorerDriver) /* the first in the list will be the default one */ },
                                                                         { BrowserTypes.Chrome , typeof(ChromeDriver) }};
@@ -41,12 +40,13 @@ namespace Contoso.CRM.UITests
             if (string.IsNullOrEmpty(broserType))
             {
                 // return the default browser type
-                // driver = ((Type)broserMapping.FirstOrDefault().Value).GetConstructor(new Type [])
+                driver = (IWebDriver)((Type)broserMapping.FirstOrDefault().Value).GetConstructor(new Type[] { }).Invoke(new object[] { });
             }
-
-
-            // { Enum.GetName(typeof(BrowserTypes), BrowserTypes.Explorer).ToLower()
-
+            else
+            {
+                var selectedBrowserType = (BrowserTypes)Enum.Parse(typeof(BrowserTypes),broserType,true);
+                driver = (IWebDriver)(broserMapping[selectedBrowserType]).GetConstructor(new Type[] { }).Invoke(new object[] { });
+            }
 
             return driver;
         }

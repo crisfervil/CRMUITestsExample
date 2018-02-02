@@ -71,6 +71,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Accounts\AccountsTests.cs" />
+    <Compile Include="BrowserTypes.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Forms\CrmFormAttribute.cs" />
     <Compile Include="Forms\Account\DefaultAccountForm.cs" />
