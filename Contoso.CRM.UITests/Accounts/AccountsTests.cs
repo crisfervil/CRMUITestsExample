@@ -1,6 +1,7 @@
 ﻿using Contoso.CRM.UITests.Forms.Account;
 using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
+using System;
 using Xunit;
 
 namespace Contoso.CRM.UITests.Accounts
@@ -14,16 +15,9 @@ namespace Contoso.CRM.UITests.Accounts
             IWebDriver browserDriver = base.GetDriver();
 
             var accountForm = new DefaultAccountForm(browserDriver, baseUrl);
-            accountForm.Create(new Data.Account() { name="Contoso", address1_name="Adress1" });
+            var accountId = accountForm.Create(new Data.Account() { name="Contoso", emailaddress1="test@test.com", address1_name="Adress1" });
 
-            // open url
-            //browserDriver.Navigate().GoToUrl(crmUrl);
-
-            // find element by id and set text
-            //browserDriver.FindElement(By.Id("name")).SendKeys("set the text");
-
-            // find element by id and make a click
-            //browserDriver.FindElement(By.Id("id")).Click();
+            System.Diagnostics.Debug.Write($"accountId:${accountId}");
 
             // close the driver & exit
             browserDriver.Close();
