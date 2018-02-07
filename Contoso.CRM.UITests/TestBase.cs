@@ -14,7 +14,7 @@ namespace Contoso.CRM.UITests
 
         internal IWebDriver GetDriver()
         {
-            IWebDriver driver =  GetBrowserDriver();
+            IWebDriver driver = GetBrowserDriver();
             return driver;
         }
 
@@ -44,13 +44,37 @@ namespace Contoso.CRM.UITests
             }
             else
             {
-                var selectedBrowserType = (BrowserTypes)Enum.Parse(typeof(BrowserTypes),broserType,true);
+                var selectedBrowserType = (BrowserTypes)Enum.Parse(typeof(BrowserTypes), broserType, true);
                 driver = (IWebDriver)(broserMapping[selectedBrowserType]).GetConstructor(new Type[] { }).Invoke(new object[] { });
             }
 
             return driver;
         }
 
+        internal void Run(Action<IWebDriver> test)
+        {
+            IWebDriver browserDriver = null;
 
-}
+            try
+            {
+                test(browserDriver);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (browserDriver != null)
+                {
+                    // close the driver & exit
+                    browserDriver.Close();
+                    browserDriver.Quit();
+                }
+            }
+
+        }
+
+
+    }
 }

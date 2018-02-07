@@ -11,18 +11,18 @@ namespace Contoso.CRM.UITests.Accounts
         [Fact]
         public void CreateAccount()
         {
-            var baseUrl = base.GetBaseUrl();
-            IWebDriver browserDriver = base.GetDriver();
+            base.Run(browserDriver =>
+            {
+                browserDriver = base.GetDriver();
+                var baseUrl = base.GetBaseUrl();
 
-            var accountForm = new DefaultAccountForm(browserDriver, baseUrl);
-            var accountId = accountForm.Create(new Data.Account() { name="Contoso", emailaddress1="test@test.com", address1_name="Adress1" });
+                var accountForm = new DefaultAccountForm(browserDriver, baseUrl);
+                var accountId = accountForm.Create(new Data.Account() { name = "Contoso", telephone1 = "0888888888" });
 
-            System.Diagnostics.Debug.Write($"accountId:${accountId}");
+                accountForm.Delete(accountId.Value);
 
-            // close the driver & exit
-            browserDriver.Close();
-            browserDriver.Quit();
-
+                System.Diagnostics.Debug.Write($"accountId:${accountId}");
+            });
         }
     }
 }

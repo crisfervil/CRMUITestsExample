@@ -14,6 +14,7 @@ namespace Contoso.CRM.UITests.Forms.Account
         {
             public static string name = "name";
             public static string emailaddress1 = "emailaddress1";
+            public static string telephone1 = "telephone1";
         }
 
         public DefaultAccountForm(IWebDriver driver, string baseUrl)
@@ -22,12 +23,15 @@ namespace Contoso.CRM.UITests.Forms.Account
             _baseUrl = baseUrl;
         }
 
+        public void Delete(Guid accountId)
+        {
+            GoToEdit(accountId);
+        }
+
         public Guid? Create(Data.Account accountData, bool save=true)
         {
             Guid? retVal = null;
             GoToCreate();
-
-            CloseTourDialogIfPresent();
 
             // find the page frame
             _webDriver.SwitchTo().Frame("contentIFrame0");
@@ -35,6 +39,7 @@ namespace Contoso.CRM.UITests.Forms.Account
             // start adding field values
             if (accountData.name != null) SetText(FormFields.name, accountData.name);
             if (accountData.emailaddress1 != null) SetText(FormFields.emailaddress1, accountData.emailaddress1);
+            if (accountData.telephone1 != null) SetText(FormFields.telephone1, accountData.telephone1);
 
             if (save)
             {
@@ -42,9 +47,10 @@ namespace Contoso.CRM.UITests.Forms.Account
 
                 // try to get the guid of the created record
                 string strGuid = (string)ExecuteScript("return Xrm.Page.data.entity.getId();");
+                System.Diagnostics.Debug.Write($"recordId:${strGuid}");
+
                 if (string.IsNullOrEmpty(strGuid)) strGuid.Replace("{","").Replace("}","");
                 retVal = Guid.Parse(strGuid);
-
             }
             return retVal;
         }
@@ -93,11 +99,27 @@ namespace Contoso.CRM.UITests.Forms.Account
 
         private void GoToCreate()
         {
+
             var formInfo = (CrmFormAttribute)(typeof(DefaultAccountForm).GetCustomAttributes(typeof(CrmFormAttribute), false).FirstOrDefault());
             var createUrl = $"{_baseUrl}?etn={formInfo.EntityName}&pagetype=entityrecord";
             _webDriver.Navigate().GoToUrl(createUrl);
 
+            CloseTourDialogIfPresent();
+
             // TODO: add code to pick a specific form
         }
+
+        private void GoToEdit(Guid recordId)
+        {
+
+            var formInfo = (CrmFormAttribute)(typeof(DefaultAccountForm).GetCustomAttributes(typeof(CrmFormAttribute), false).FirstOrDefault());
+            var editUrl = $"{_baseUrl}?etn={formInfo.EntityName}&pagetype=entityrecord&id={recordId}";
+            _webDriver.Navigate().GoToUrl(editUrl);
+
+            CloseTourDialogIfPresent();
+
+            // TODO: add code to pick a specific form
+        }
+
     }
 }

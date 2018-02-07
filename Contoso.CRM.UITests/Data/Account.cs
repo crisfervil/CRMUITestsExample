@@ -9,6 +9,7 @@ namespace Contoso.CRM.UITests.Data
     class Account
     {
         internal string emailaddress1;
+        internal string telephone1;
 
         public Guid? accountid { get; set; }
         public string name { get; internal set; } 
