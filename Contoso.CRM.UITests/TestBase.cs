@@ -54,6 +54,7 @@ namespace Contoso.CRM.UITests
         internal void Run(Action<IWebDriver> test)
         {
             IWebDriver browserDriver = null;
+            browserDriver = GetDriver();
 
             try
             {

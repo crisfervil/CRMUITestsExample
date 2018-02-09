@@ -13,7 +13,6 @@ namespace Contoso.CRM.UITests.Accounts
         {
             base.Run(browserDriver =>
             {
-                browserDriver = base.GetDriver();
                 var baseUrl = base.GetBaseUrl();
 
                 var accountForm = new DefaultAccountForm(browserDriver, baseUrl);

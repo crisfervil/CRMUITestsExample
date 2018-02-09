@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Linq;
 
@@ -45,9 +46,12 @@ namespace Contoso.CRM.UITests.Forms.Account
             {
                 _webDriver.FindElement(By.Id("savefooter_statuscontrol")).Click();
 
+                var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+                var element = wait.Until(driver => !String.IsNullOrEmpty((string)ExecuteScript("return Xrm.Page.data.entity.getId();")));
+
                 // try to get the guid of the created record
                 string strGuid = (string)ExecuteScript("return Xrm.Page.data.entity.getId();");
-                System.Diagnostics.Debug.Write($"recordId:${strGuid}");
+                Console.WriteLine($"recordId:{strGuid}");
 
                 if (string.IsNullOrEmpty(strGuid)) strGuid.Replace("{","").Replace("}","");
                 retVal = Guid.Parse(strGuid);
