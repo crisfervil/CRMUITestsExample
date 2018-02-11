@@ -4,12 +4,15 @@ using OpenQA.Selenium.IE;
 using System.Collections.Generic;
 using OpenQA.Selenium.Chrome;
 using System.Linq;
+using Contoso.CRM.UITests.Forms;
 
 namespace Contoso.CRM.UITests
 {
     public class TestBase
     {
         private const string BASE_URL_ENVIRONMENT_VARIABLE = "MYUITESTS.BASE_URL";
+        private const string USER_NAME_ENVIRONMENT_VARIABLE = "MYUITESTS.ONLINE.USERNAME";
+        private const string PASSWORD_ENVIRONMENT_VARIABLE = "MYUITESTS.ONLINE.PASSWORD";
         private const string BROWSER_TYPE_ENVIRONMENT_VARIABLE = "MYUITESTS.BROWSER_TYPE";
 
         internal IWebDriver GetDriver()
@@ -20,8 +23,33 @@ namespace Contoso.CRM.UITests
 
         internal string GetBaseUrl()
         {
-            // Try to get the base url from the environment variable, otherwise from the configuration file
+            // Try to get the base URL from the environment variable, otherwise from the configuration file
             return Environment.GetEnvironmentVariable(BASE_URL_ENVIRONMENT_VARIABLE);
+        }
+
+        internal string GetBaseUrlSafe()
+        {
+            var url = GetBaseUrl();
+            if (string.IsNullOrEmpty(url)) throw new Exception("Base URL not found");
+            return url;
+        }
+
+        internal Tuple<string,string> GetCredentials()
+        {
+            // Try to get the base URL from the environment variable, otherwise from the configuration file
+            var userName = Environment.GetEnvironmentVariable(USER_NAME_ENVIRONMENT_VARIABLE);
+            var pwd = Environment.GetEnvironmentVariable(PASSWORD_ENVIRONMENT_VARIABLE);
+            return new Tuple<string, string>(userName, pwd);
+        }
+
+        internal string Setup(IWebDriver driver)
+        {
+            var credentials = GetCredentials();
+            var baseUrl = GetBaseUrlSafe();
+            driver.Navigate().GoToUrl(baseUrl);
+            var auth = new AuthenticationForm(driver);
+            auth.SignIn(credentials.Item1, credentials.Item2);
+            return baseUrl;
         }
 
         internal IWebDriver GetBrowserDriver()
@@ -69,13 +97,10 @@ namespace Contoso.CRM.UITests
                 if (browserDriver != null)
                 {
                     // close the driver & exit
-                    browserDriver.Close();
-                    browserDriver.Quit();
+                    //browserDriver.Close();
+                    //browserDriver.Quit();
                 }
             }
-
         }
-
-
     }
 }

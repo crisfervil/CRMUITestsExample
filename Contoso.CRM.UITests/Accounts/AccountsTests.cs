@@ -13,7 +13,7 @@ namespace Contoso.CRM.UITests.Accounts
         {
             base.Run(browserDriver =>
             {
-                var baseUrl = base.GetBaseUrl();
+                var baseUrl = Setup(browserDriver);
 
                 var accountForm = new DefaultAccountForm(browserDriver, baseUrl);
                 var accountId = accountForm.Create(new Data.Account() { name = "Contoso", telephone1 = "0888888888" });
