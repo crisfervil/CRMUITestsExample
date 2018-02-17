@@ -101,8 +101,8 @@ namespace Contoso.CRM.UITests
                 if (browserDriver != null)
                 {
                     // close the driver & exit
-                    //browserDriver.Close();
-                    //browserDriver.Quit();
+                    browserDriver.Close();
+                    browserDriver.Quit();
                 }
             }
         }
