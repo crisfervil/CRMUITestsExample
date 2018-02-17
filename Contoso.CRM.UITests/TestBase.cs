@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using OpenQA.Selenium.Chrome;
 using System.Linq;
 using Contoso.CRM.UITests.Forms;
+using OpenQA.Selenium.Support.UI;
 
 namespace Contoso.CRM.UITests
 {
@@ -47,8 +48,11 @@ namespace Contoso.CRM.UITests
             var credentials = GetCredentials();
             var baseUrl = GetBaseUrlSafe();
             driver.Navigate().GoToUrl(baseUrl);
-            var auth = new AuthenticationForm(driver);
-            auth.SignIn(credentials.Item1, credentials.Item2);
+            if (driver.Url.Contains("login.microsoftonline.com"))
+            {
+                var auth = new AuthenticationForm(driver);
+                auth.SignIn(credentials.Item1, credentials.Item2);
+            }
             return baseUrl;
         }
 

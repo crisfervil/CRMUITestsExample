@@ -1,10 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Contoso.CRM.UITests.Forms
 {
@@ -20,18 +17,13 @@ namespace Contoso.CRM.UITests.Forms
         public void SignIn(string userName, string password)
         {
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
-            wait.Until(x => x.Url.Contains("login.microsoftonline.com"));
-
-            _driver.FindElement(By.Name("loginfmt")).SendKeys(userName);
-            _driver.FindElement(By.Id("idSIButton9")).Click();
-            _driver.FindElement(By.Name("passwd")).SendKeys(password);
-            _driver.FindElement(By.Name("passwd")).SendKeys(Keys.Tab);
-            _driver.FindElement(By.Name("passwd")).SendKeys(Keys.Enter);
-            //wait.Until(x => x.FindElement(By.Id("idSIButton9")).Displayed);
-            //IJavaScriptExecutor ex = (IJavaScriptExecutor)_driver;
-            //ex.ExecuteScript("arguments[0].parentElement.click();", _driver.FindElement(By.Id("idSIButton9")));
-            //_driver.FindElement(By.Id("idSIButton9")).Click();
-            _driver.FindElement(By.Id("idBtn_Back")).Click();
+            _driver.FindElement(By.Name("loginfmt")).SendKeys(userName); // type user name
+            _driver.FindElement(By.Id("idSIButton9")).Click(); // click on next button
+            _driver.FindElement(By.Name("passwd")).SendKeys(password); // type pwd
+            System.Threading.Thread.Sleep(1000); // wait for the sign in button to be available
+            wait.Until(x => _driver.FindElement(By.Id("idSIButton9")).Displayed);
+            _driver.FindElement(By.Id("idSIButton9")).Click(); // click on sign in button
+            _driver.FindElement(By.Id("idBtn_Back")).Click(); // click on not stay signed in
 
         }
     }
