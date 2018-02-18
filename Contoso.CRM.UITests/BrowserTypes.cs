@@ -8,6 +8,6 @@ namespace Contoso.CRM.UITests
 {
     enum BrowserTypes
     {
-        Explorer, Chrome
+        Explorer, Edge, Chrome
     }
 }

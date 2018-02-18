@@ -6,6 +6,7 @@ using OpenQA.Selenium.Chrome;
 using System.Linq;
 using Contoso.CRM.UITests.Forms;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Edge;
 
 namespace Contoso.CRM.UITests
 {
@@ -48,6 +49,7 @@ namespace Contoso.CRM.UITests
             var credentials = GetCredentials();
             var baseUrl = GetBaseUrlSafe();
             driver.Navigate().GoToUrl(baseUrl);
+            System.Threading.Thread.Sleep(1000);
             if (driver.Url.Contains("login.microsoftonline.com"))
             {
                 var auth = new AuthenticationForm(driver);
@@ -66,8 +68,9 @@ namespace Contoso.CRM.UITests
             // capitalize
             broserType = string.IsNullOrEmpty(broserType) ? "" : broserType.ToLower();
 
-            var broserMapping = new Dictionary<BrowserTypes, Type>() { { BrowserTypes.Explorer , typeof(InternetExplorerDriver) /* the first in the list will be the default one */ },
-                                                                        { BrowserTypes.Chrome , typeof(ChromeDriver) }};
+            var broserMapping = new Dictionary<BrowserTypes, Type>() { { BrowserTypes.Explorer, typeof(InternetExplorerDriver) /* the first in the list will be the default one */ },
+                                                                        { BrowserTypes.Chrome, typeof(ChromeDriver) },
+                                                                        { BrowserTypes.Edge, typeof(EdgeDriver) }};
 
             if (string.IsNullOrEmpty(broserType))
             {
